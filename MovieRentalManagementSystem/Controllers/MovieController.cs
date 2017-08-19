@@ -34,7 +34,7 @@ namespace MovieRentalManagementSystem.Controllers
             {
                 Genres = _context.Genres.ToList()
             };
-            return View(viewModle);
+            return View("MovieForm", viewModle);
         }
 
         public ActionResult Details(int id)
@@ -53,13 +53,37 @@ namespace MovieRentalManagementSystem.Controllers
 
         public ActionResult Edit(int id)
         {
-            return Content("Edit ID: " + id);
+            var customer = _context.Movie.SingleOrDefault(s => s.Id == id);
+            if (customer == null)
+            {
+                return HttpNotFound();
+            }
+
+            var viweModel = new MovieViewModel()
+            {
+                Movie = customer,
+                Genres = _context.Genres.ToList()
+            };
+            return View("MovieForm", viweModel);
         }
 
         [HttpPost]
         public ActionResult Save(Movie movie)
         {
-            _context.Movie.Add(movie);
+
+            if (movie.Id == 0)
+            {
+                _context.Movie.Add(movie);
+            }
+            else
+            {
+                var movieInBD = _context.Movie.Single(s => s.Id == movie.Id);
+                movieInBD.AddedDate = movie.AddedDate;
+                movieInBD.GenreId = movie.GenreId;
+                movieInBD.ReleaseDate = movie.ReleaseDate;
+                movieInBD.Stock = movie.Stock;
+
+            }
             _context.SaveChanges();
             return RedirectToAction("Index", "Movie");
         }
