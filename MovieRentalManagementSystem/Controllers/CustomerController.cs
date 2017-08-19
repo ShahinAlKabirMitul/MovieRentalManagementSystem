@@ -1,4 +1,5 @@
 ﻿using MovieRentalManagementSystem.Models;
+using MovieRentalManagementSystem.ViewModel;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
@@ -17,6 +18,40 @@ namespace MovieRentalManagementSystem.Controllers
         {
             _context.Dispose();
         }
+
+        public ActionResult New()
+        {
+            var memberShipTypes = _context.MembershipTypes.ToList();
+            var newCustomerViewModel = new CustomerFormViewModel()
+            {
+                MembershipTypes = memberShipTypes
+            };
+            return View("CustomerForm", newCustomerViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Save(Customer customer)
+        {
+            if (customer.Id == 0)
+            {
+
+
+                _context.Customers.Add(customer);
+            }
+            else
+            {
+                var customerFound = _context.Customers.Single(s => s.Id == customer.Id);
+
+                customerFound.Name = customer.Name;
+                customerFound.IsSubscribedToNewsLetter = customerFound.IsSubscribedToNewsLetter;
+                customerFound.BirthDay = customer.BirthDay;
+                customerFound.MembershipTypeId = customer.MembershipTypeId;
+            }
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Customer");
+        }
+
         // GET: Customer
         public ActionResult Index()
         {
@@ -39,5 +74,20 @@ namespace MovieRentalManagementSystem.Controllers
         }
 
 
+        public ActionResult Edit(int id)
+        {
+            var customer = _context.Customers.SingleOrDefault(s => s.Id == id);
+            if (customer == null)
+            {
+                return HttpNotFound();
+            }
+
+            var viweModel = new CustomerFormViewModel()
+            {
+                Customer = customer,
+                MembershipTypes = _context.MembershipTypes.ToList()
+            };
+            return View("CustomerForm", viweModel);
+        }
     }
 }

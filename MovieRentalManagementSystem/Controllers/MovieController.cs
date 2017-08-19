@@ -14,6 +14,10 @@ namespace MovieRentalManagementSystem.Controllers
         {
             _context = new ApplicationDbContext();
         }
+        protected override void Dispose(bool dispose)
+        {
+            _context.Dispose();
+        }
 
         // GET: Movie
         public ActionResult Index()
@@ -26,7 +30,7 @@ namespace MovieRentalManagementSystem.Controllers
         {
             {
 
-                var movie = _context.Movie.Include(s=>s.Genre).SingleOrDefault(c => c.Id == id);
+                var movie = _context.Movie.Include(s => s.Genre).SingleOrDefault(c => c.Id == id);
 
                 if (movie == null)
                     return HttpNotFound();

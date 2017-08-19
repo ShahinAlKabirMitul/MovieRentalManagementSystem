@@ -1,0 +1,32 @@
+﻿@model MovieRentalManagementSystem.ViewModel.CustomerFormViewModel
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>New Customer </h2>
+@using (Html.BeginForm("Save","Customer"))
+{
+    <div class="form-group">
+        @Html.LabelFor(s=>s.Customer.Name)
+        @Html.TextBoxFor(s=>s.Customer.Name,new {@class="form-control"})
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(s=>s.Customer.BirthDay)
+        @Html.TextBoxFor(s=>s.Customer.BirthDay,"{0:d MMM yyyy}", new {@class="form-control"})
+    </div> 
+   
+    <div class="form-group">
+        @Html.LabelFor(s=>s.Customer.MembershipTypeId)
+        @Html.DropDownListFor(s=>s.Customer.MembershipTypeId,new SelectList(Model.MembershipTypes,"Id","Name"),"Select", new { @class = "form-control" })
+    </div>
+
+    <div class="checkbox">
+        <label>
+            @Html.CheckBoxFor(s=>s.Customer.IsSubscribedToNewsLetter) Is Subscribe for new Letter
+        </label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+}
+
