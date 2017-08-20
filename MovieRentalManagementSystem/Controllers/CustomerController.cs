@@ -32,10 +32,17 @@ namespace MovieRentalManagementSystem.Controllers
         [HttpPost]
         public ActionResult Save(Customer customer)
         {
+            if (!ModelState.IsValid)
+            {
+                var customeViewModel = new CustomerFormViewModel()
+                {
+                    Customer = customer,
+                    MembershipTypes = _context.MembershipTypes.ToList()
+                };
+                return View("CustomerForm", customeViewModel);
+            }
             if (customer.Id == 0)
             {
-
-
                 _context.Customers.Add(customer);
             }
             else
