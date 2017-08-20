@@ -22,5 +22,8 @@ namespace MovieRentalManagementSystem.Models
         [Min18YearsIfMember]
         public DateTime? BirthDay { get; set; }
 
+       
+
+
     }
 }
