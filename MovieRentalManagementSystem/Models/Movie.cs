@@ -29,5 +29,10 @@ namespace MovieRentalManagementSystem.Models
         [Display(Name = "Genre")]
         public int GenreId { get; set; }
 
+        public string Title
+        {
+            get { return Id != 0 ? "Edit Movie" : "New Movie"; }
+        }
+
     }
 }
