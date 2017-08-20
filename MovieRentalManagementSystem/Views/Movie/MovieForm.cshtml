@@ -10,14 +10,17 @@
     <div class="form-group">
         @Html.LabelFor(s => s.Movie.Name)
         @Html.TextBoxFor(s => s.Movie.Name, new {@class = "form-control"})
+        @Html.ValidationMessageFor(s=>s.Movie.Name)
     </div>
     <div class="form-group">
         @Html.LabelFor(s => s.Movie.ReleaseDate)
         @Html.TextBoxFor(s => s.Movie.ReleaseDate,"{0:d MMM yyyy}", new {@class = "form-control"})
+        @Html.ValidationMessageFor(s=>s.Movie.ReleaseDate)
     </div>
     <div class="form-group">
         @Html.LabelFor(s => s.Movie.AddedDate)
         @Html.TextBoxFor(s => s.Movie.AddedDate, "{0:d MMM yyyy}", new {@class = "form-control"})
+        @Html.ValidationMessageFor(s=>s.Movie.AddedDate)
     </div>
     <div class="form-group">
         <div class="form-group">
@@ -29,9 +32,10 @@
     <div class="form-group">
         @Html.LabelFor(s => s.Movie.Stock)
         @Html.TextBoxFor(s => s.Movie.Stock, new {@class = "form-control"})
+        @Html.ValidationMessageFor(s=>s.Movie.Stock)
     </div>
 
-
+    @Html.AntiForgeryToken()
     <button type="submit" class="btn btn-primary">Save</button>
 }
 

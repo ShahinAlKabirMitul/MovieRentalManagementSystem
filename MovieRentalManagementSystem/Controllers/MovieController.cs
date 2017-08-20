@@ -32,6 +32,7 @@ namespace MovieRentalManagementSystem.Controllers
         {
             var viewModle = new MovieViewModel()
             {
+                Movie = new Movie() { AddedDate = System.DateTime.Now.Date, ReleaseDate = System.DateTime.Now.Date },
                 Genres = _context.Genres.ToList()
             };
             return View("MovieForm", viewModle);
@@ -70,6 +71,15 @@ namespace MovieRentalManagementSystem.Controllers
         [HttpPost]
         public ActionResult Save(Movie movie)
         {
+            if (!ModelState.IsValid)
+            {
+                var viweModel = new MovieViewModel()
+                {
+                    Movie = movie,
+                    Genres = _context.Genres.ToList()
+                };
+                return View("MovieForm", viweModel);
+            }
 
             if (movie.Id == 0)
             {

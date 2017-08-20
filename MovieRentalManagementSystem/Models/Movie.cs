@@ -6,8 +6,8 @@ namespace MovieRentalManagementSystem.Models
     public class Movie
     {
         public int Id { get; set; }
-        [Required]
 
+        [Required]
         public string Name { get; set; }
 
         [Required]
@@ -20,6 +20,7 @@ namespace MovieRentalManagementSystem.Models
 
         [Display(Name = "Number Of Sotck")]
         [Required]
+        [Range(1, 20)]
         public int Stock { get; set; }
 
         public Genre Genre { get; set; }
