@@ -1,4 +1,6 @@
-﻿using MovieRentalManagementSystem.Models;
+﻿using AutoMapper;
+using MovieRentalManagementSystem.Dtos;
+using MovieRentalManagementSystem.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -15,33 +17,36 @@ namespace MovieRentalManagementSystem.Controllers.API
             _dbContext = new ApplicationDbContext();
         }
 
-        public IEnumerable<Customer> GetCustomers()
+        public IEnumerable<CustomerDto> GetCustomers()
         {
-            return _dbContext.Customers.ToList();
+            return _dbContext.Customers.ToList().Select(Mapper.Map<Customer, CustomerDto>);
         }
 
-        public Customer GetCustomer(int id)
+        public CustomerDto GetCustomer(int id)
         {
             var customer = _dbContext.Customers.SingleOrDefault(s => s.Id == id);
             if (customer == null)
             {
                 new HttpResponseException(HttpStatusCode.NotFound);
             }
-            return customer;
+            return Mapper.Map<Customer, CustomerDto>(customer);
         }
 
         [HttpPost]
-        public Customer CreateCustomer(Customer customer)
+        public CustomerDto CreateCustomer(CustomerDto customerDto)
         {
             if (!ModelState.IsValid)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            var customer = Mapper.Map<CustomerDto, Customer>(customerDto);
             _dbContext.Customers.Add(customer);
             _dbContext.SaveChanges();
-            return customer;
+            customerDto.Id = customer.Id;
+            return customerDto;
         }
 
         [HttpPut]
-        public void UpdateCustomer(int id, Customer customer)
+        public void UpdateCustomer(int id, CustomerDto customerDto)
         {
             if (!ModelState.IsValid)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
@@ -51,10 +56,8 @@ namespace MovieRentalManagementSystem.Controllers.API
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
-            customerDb.Name = customer.Name;
-            customerDb.BirthDay = customer.BirthDay;
-            customerDb.IsSubscribedToNewsLetter = customer.IsSubscribedToNewsLetter;
-            customerDb.MembershipTypeId = customer.MembershipTypeId;
+            Mapper.Map(customerDto, customerDb);
+
             _dbContext.SaveChanges();
         }
 
