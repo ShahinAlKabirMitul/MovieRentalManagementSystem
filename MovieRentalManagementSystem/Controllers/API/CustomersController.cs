@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MovieRentalManagementSystem.Dtos;
 using MovieRentalManagementSystem.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -22,27 +23,27 @@ namespace MovieRentalManagementSystem.Controllers.API
             return _dbContext.Customers.ToList().Select(Mapper.Map<Customer, CustomerDto>);
         }
 
-        public CustomerDto GetCustomer(int id)
+        public IHttpActionResult GetCustomer(int id)
         {
             var customer = _dbContext.Customers.SingleOrDefault(s => s.Id == id);
             if (customer == null)
             {
-                new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
             }
-            return Mapper.Map<Customer, CustomerDto>(customer);
+            return Ok(Mapper.Map<Customer, CustomerDto>(customer));
         }
 
         [HttpPost]
-        public CustomerDto CreateCustomer(CustomerDto customerDto)
+        public IHttpActionResult CreateCustomer(CustomerDto customerDto)
         {
             if (!ModelState.IsValid)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                return BadRequest();
 
             var customer = Mapper.Map<CustomerDto, Customer>(customerDto);
             _dbContext.Customers.Add(customer);
             _dbContext.SaveChanges();
             customerDto.Id = customer.Id;
-            return customerDto;
+            return Created(new Uri(Request.RequestUri + "/" + customer.Id), customer);
         }
 
         [HttpPut]
