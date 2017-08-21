@@ -1,26 +1,55 @@
-﻿@model IEnumerable<MovieRentalManagementSystem.Models.Customer>
+﻿@using MovieRentalManagementSystem.Models
+@model IEnumerable<MovieRentalManagementSystem.Models.Customer>
 
-<button class="btn btn-info btn-lg" type="submit" onclick="location.href='@Url.Action("New", "Customer")'">Add Customer</button>
-<table class="table">
+<button  class="btn btn-info btn-lg" type="submit" onclick="location.href='@Url.Action("New", "Customer")'">Add Customer</button>
+<table id="customers" class="table table-bordered table-hover">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Name)
         </th>
        
         <th>Membership Type</th>
+        <th>Delete</th>
     </tr>
 
-@foreach (var item in Model)
-{
-    <tr>
+    @foreach (var customer in Model)
+    {
+        <tr>
        
-        <td>
-            @Html.ActionLink(item.Name, "Edit", new { id = item.Id })
-        </td>
+            <td>
+                @Html.ActionLink(customer.Name, "Edit", new { id = customer.Id })
+            </td>
        
-        <td>@item.MembershipType.Name </td>
+            <td>@customer.MembershipType.Name </td>
+            <td>
+                <button data-customer-id="@customer.Id" class="btn-link js-delete ">Delete</button>
+            </td>
+
         
-    </tr>
-}
+        </tr>
+    }
 
 </table>
+
+@section scripts
+{
+    <script>
+       
+        $(document).ready(function() {
+            $("#customers .js-delete").on("click", function () {
+                var button = $(this);
+               if (confirm("Are you sure to delete this customer???")) {
+                   $.ajax({
+                       url: "/api/customers/" + button.attr("data-customer-id"),
+                       method: "Delete",
+                       success: function() {
+                           button.parents("tr").remove();
+
+                       }
+                   });
+               }
+            }); 
+        });
+
+    </script>
+}
