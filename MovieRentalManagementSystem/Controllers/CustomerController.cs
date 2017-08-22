@@ -1,6 +1,5 @@
 ﻿using MovieRentalManagementSystem.Models;
 using MovieRentalManagementSystem.ViewModel;
-using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -64,8 +63,8 @@ namespace MovieRentalManagementSystem.Controllers
         public ActionResult Index()
         {
 
-            var customer = _context.Customers.Include(c => c.MembershipType).ToList();
-            return View(customer);
+            // var customer = _context.Customers.Include(c => c.MembershipType).ToList();
+            return View();
         }
         public ActionResult Details(int id)
         {
