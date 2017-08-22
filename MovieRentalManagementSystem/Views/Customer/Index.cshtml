@@ -42,7 +42,7 @@
                         }
                     },
                     {
-                         data:"name"
+                         data:"membershipType.name"
                     },
                     {
                         data: "id",
@@ -53,8 +53,9 @@
                     }
                  ]
             });
-
-            $("#customers").on("click", "js - delete", function () {
+             
+            $("#customers").on("click", "js-delete", function () {
+                console.log("sf");
                 var button = $(this);
 
                 bootbox.confirm("Are you sure you want to delete this customer",

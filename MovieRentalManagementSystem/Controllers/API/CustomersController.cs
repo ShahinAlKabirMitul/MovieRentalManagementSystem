@@ -3,6 +3,7 @@ using MovieRentalManagementSystem.Dtos;
 using MovieRentalManagementSystem.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
@@ -20,7 +21,10 @@ namespace MovieRentalManagementSystem.Controllers.API
 
         public IEnumerable<CustomerDto> GetCustomers()
         {
-            return _dbContext.Customers.ToList().Select(Mapper.Map<Customer, CustomerDto>);
+            return _dbContext.Customers.
+                    Include(s => s.MembershipType).
+                    ToList().
+                    Select(Mapper.Map<Customer, CustomerDto>);
         }
 
         public IHttpActionResult GetCustomer(int id)
